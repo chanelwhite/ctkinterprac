@@ -44,8 +44,10 @@ DARK_MODE = "dark"
 customtkinter.set_appearance_mode(DARK_MODE)
 customtkinter.set_default_color_theme("blue")
 main_container = customtkinter.CTk()
-main_container.geometry("500x600")
+main_container.geometry("700x600")
 main_container.title("EnyiAi")
+
+
 frames = [Page(), Page(), Page()]
 
 def get_name():
@@ -78,18 +80,24 @@ def make_frame2():
     frames[1].entry.pack(pady=12, padx=20, side=customtkinter.BOTTOM)
     frames[1].button1 = customtkinter.CTkButton(master=frames[1].frame, text="Login", command=make_frame3)        
     frames[1].button1.pack(pady=12, padx=30)
-    
+def create_nav():
+     left_side_panel = customtkinter.CTkFrame(main_container, width=50, corner_radius=8, fg_color="grey")
+     left_side_panel.pack(side=tkinter.LEFT, fill=tkinter.Y, expand=False, padx=2, pady=20)
+     home_button= customtkinter.CTkButton(master=left_side_panel, text="Home", command=make_main)
+     home_button.pack()
+
 def make_main():
     if frames[2].get_frame() != None:
          frames[2].get_frame().destroy()
+         create_nav()
         
     frames[0].set_frame(customtkinter.CTkFrame(master=main_container, fg_color="#34e5eb"))
-    frames[0].get_frame().pack(pady = 20, padx=60, fill="both", expand=True)
+    frames[0].get_frame().pack(pady = 20, padx=10, fill="both", expand=True)
 
     frames[0].set_label(customtkinter.CTkLabel(master=frames[0].get_frame(), font= ("Roboto", 30), text= "Welcome to \nEnyiAi\nPlease enter your name"))
     frames[0].get_label().pack(pady=30, padx=10)
 
-    frames[0].set_entry(customtkinter.CTkEntry(master=frames[0].get_frame(), placeholder_text="Name", text_color="blue"))
+    frames[0].set_entry(customtkinter.CTkEntry(master=frames[0].get_frame(), placeholder_text="Name", text_color="white"))
     frames[0].get_entry().pack(pady=12, padx=20)
 
     frames[0].set_button1(customtkinter.CTkButton(master=frames[0].get_frame(), text="Practice Scenarios", command=make_frame2)) 
@@ -105,10 +113,13 @@ def make_main():
 
 
 
+
 #main_container = customtkinter.CTkFrame(master=main_container, corner_radius=8, fg_color='black')
 #main_container.pack(fill=tkinter.BOTH, expand=True, padx=8, pady=8)
 
 
 if __name__ == "__main__":
+      create_nav()
       make_main()
+      
       main_container.mainloop()
