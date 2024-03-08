@@ -36,9 +36,23 @@ class Page(customtkinter.CTk):
          return self.entry
     
     
+class User():
+     id = -1
+     def __init__(self, name):
+          self.name = name
+          User.id += 1
+          self.uid = User.id
+          
+
+     def get_name(self) -> str:
+          return self.name
+     
+     def get_id(self) -> int:
+          return self.uid
+
 
     
-    
+ 
 
 DARK_MODE = "dark"
 customtkinter.set_appearance_mode(DARK_MODE)
@@ -49,16 +63,19 @@ main_container.title("EnyiAi")
 
 
 frames = [Page(), Page(), Page()]
+users = []
 
-def get_name():
-        name = frames[0].get_entry().get()
-        print(name)
+def get_user_name():
+        new_u =  User(frames[0].get_entry().get())
+        name = new_u.get_name()
+        id = new_u.get_id()
+        print(name, id)
         frames[0].get_entry().delete(0, len(name))
         return name
 
 def make_frame3():
     '''Code for the third frame'''
-    frames[1].get_frame().destroy()
+    clear_frames()
     frames[2].set_frame(customtkinter.CTkFrame(master=main_container, fg_color="blue")) 
     frames[2].set_label(customtkinter.CTkLabel(master=frames[2].get_frame(), text= "Welcome to the third page"))
     frames[2].get_frame().pack(pady = 20, padx=60, fill="both", expand=True)
@@ -69,8 +86,11 @@ def make_frame3():
 
 def make_frame2():
     '''Code for the second frame'''
-    n = get_name()
-    frames[0].get_frame().destroy()      
+    # TODO: figure out how to get the name to stay persistent across pages
+    n = get_user_name()
+    clear_frames()
+    
+    #frames[0].get_frame().destroy()      
     frames[1].frame = customtkinter.CTkFrame(master=main_container, fg_color="blue")
     frames[1].frame.pack(pady = 20, padx=60, fill="both", expand=True)
     
@@ -84,38 +104,33 @@ def create_nav():
      left_side_panel = customtkinter.CTkFrame(main_container, width=50, corner_radius=8, fg_color="grey")
      left_side_panel.pack(side=tkinter.LEFT, fill=tkinter.Y, expand=False, padx=2, pady=20)
      home_button= customtkinter.CTkButton(master=left_side_panel, text="Home", command=make_main)
-     home_button.pack()
+     home_button.pack(pady=12, padx=10)
+     emotion_button = customtkinter.CTkButton(master=left_side_panel, text="Emotion Detector", command=make_frame3)
+     #button2.pack(pady=12, padx=10)
+     emotion_button.pack(pady=12, padx=10)
+     scenario_button = customtkinter.CTkButton(master=left_side_panel, text="Practice Scenarios", command=make_frame2)
+     scenario_button.pack(pady=12, padx=10)
+     
+def clear_frames():
+     if frames[2].get_frame() != None:
+          frames[2].get_frame().destroy()
+     if frames[0].get_frame() != None:
+         frames[0].get_frame().destroy()
+     if frames[1].get_frame() != None:
+         frames[1].get_frame().destroy()
 
 def make_main():
-    if frames[2].get_frame() != None:
-         frames[2].get_frame().destroy()
-         create_nav()
-        
-    frames[0].set_frame(customtkinter.CTkFrame(master=main_container, fg_color="#34e5eb"))
-    frames[0].get_frame().pack(pady = 20, padx=10, fill="both", expand=True)
-
-    frames[0].set_label(customtkinter.CTkLabel(master=frames[0].get_frame(), font= ("Roboto", 30), text= "Welcome to \nEnyiAi\nPlease enter your name"))
-    frames[0].get_label().pack(pady=30, padx=10)
-
-    frames[0].set_entry(customtkinter.CTkEntry(master=frames[0].get_frame(), placeholder_text="Name", text_color="white"))
-    frames[0].get_entry().pack(pady=12, padx=20)
-
-    frames[0].set_button1(customtkinter.CTkButton(master=frames[0].get_frame(), text="Practice Scenarios", command=make_frame2)) 
-    #button1.pack(pady=12, padx=10)
-    frames[0].get_button1().pack(pady=12, padx=30, side=customtkinter.LEFT)
-
-    frames[0].set_button2(customtkinter.CTkButton(master=frames[0].get_frame(), text="Emotion Detector", command=get_name))
-    #button2.pack(pady=12, padx=10)
-    frames[0].get_button2().pack(pady=12, padx=40, side=customtkinter.RIGHT)
+     clear_frames()     
+     frames[0].set_frame(customtkinter.CTkFrame(master=main_container, fg_color="#34e5eb"))
+     frames[0].get_frame().pack(pady = 20, padx=10, fill="both", expand=True)
+     frames[0].set_label(customtkinter.CTkLabel(master=frames[0].get_frame(), font= ("Roboto", 30), text= "Welcome to \nEnyiAi\nPlease enter your name"))
+     frames[0].get_label().pack(pady=30, padx=10)
+     frames[0].set_entry(customtkinter.CTkEntry(master=frames[0].get_frame(), placeholder_text="Name", text_color="white"))
+     frames[0].get_entry().pack(pady=12, padx=20)
+     #n = get_name()
+     
 
 
-
-
-
-
-
-#main_container = customtkinter.CTkFrame(master=main_container, corner_radius=8, fg_color='black')
-#main_container.pack(fill=tkinter.BOTH, expand=True, padx=8, pady=8)
 
 
 if __name__ == "__main__":
