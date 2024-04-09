@@ -1,9 +1,11 @@
 import tkinter
 import customtkinter
 from functools import partial
+from PIL import Image
 
 class Page(customtkinter.CTk):
     def __init__(self):
+        '''Creates a page object with a frame, buttons and labels'''
         self.frame = None
         self.button1 = None
         self.button2 = None
@@ -34,6 +36,15 @@ class Page(customtkinter.CTk):
          self.entry = e
     def get_entry(self):
          return self.entry
+    def create_entry(self, parent):
+        self.entry = customtkinter.CTkEntry(master=frames[0].get_frame(), placeholder_text="Name", text_color="white")
+        return self.entry
+
+    def create_button(self, t, com, parent):
+         self.button = customtkinter.CTkButton(master=parent.get_frame(), text= t, command=com)
+         self.button.pack(pady=12, padx=30, side=customtkinter.BOTTOM)
+         return self.button
+         
     
     
 class User():
@@ -63,31 +74,39 @@ main_container.title("EnyiAi")
 
 
 frames = [Page(), Page(), Page()]
-users = []
+user = []
 
 def get_user_name():
-        new_u =  User(frames[0].get_entry().get())
-        name = new_u.get_name()
-        id = new_u.get_id()
-        print(name, id)
-        frames[0].get_entry().delete(0, len(name))
-        return name
+        
+     new_u =  User(frames[0].get_entry().get())
+     name = new_u.get_name()
+     id = new_u.get_id()
+     print(name, id)
+     frames[0].get_entry().delete(0, len(name))
+     user.append(name)
+     user.append(id)
 
 def make_frame3():
     '''Code for the third frame'''
     clear_frames()
     frames[2].set_frame(customtkinter.CTkFrame(master=main_container, fg_color="blue")) 
-    frames[2].set_label(customtkinter.CTkLabel(master=frames[2].get_frame(), text= "Welcome to the third page"))
+    frames[2].set_label(customtkinter.CTkLabel(master=frames[2].get_frame(), text= f"Welcome to the third page{user[0]}"))
     frames[2].get_frame().pack(pady = 20, padx=60, fill="both", expand=True)
     frames[2].get_label().pack(pady=30, padx=10)
-    frames[2].set_button1(customtkinter.CTkButton(master=frames[2].get_frame(), text="Login", command=make_main))
+    frames[2].set_button1(customtkinter.CTkButton(master=frames[2].get_frame(), text= "emotion", command=main))
     frames[2].get_button1().pack(pady=12, padx=30, side=customtkinter.BOTTOM)
+    button1 = frames[2].create_button("button 2", print("test create"), frames[2])
+    button1.pack(pady=20, padx=30)
+    frames[2].create_button("button 3", main, frames[2])
     
 
 def make_frame2():
     '''Code for the second frame'''
     # TODO: figure out how to get the name to stay persistent across pages
-    n = get_user_name()
+    #Use partial to pass parameters through the button
+    #make the name global/use the list/use dictionary/make a user class with active flag
+    #get_user_name()
+    n = user[0]
     clear_frames()
     
     #frames[0].get_frame().destroy()      
@@ -103,13 +122,15 @@ def make_frame2():
 def create_nav():
      left_side_panel = customtkinter.CTkFrame(main_container, width=50, corner_radius=8, fg_color="grey")
      left_side_panel.pack(side=tkinter.LEFT, fill=tkinter.Y, expand=False, padx=2, pady=20)
-     home_button= customtkinter.CTkButton(master=left_side_panel, text="Home", command=make_main)
+     home_button= customtkinter.CTkButton(master=left_side_panel, text="Home", command=main)
      home_button.pack(pady=12, padx=10)
-     emotion_button = customtkinter.CTkButton(master=left_side_panel, text="Emotion Detector", command=make_frame3)
+     emotion_button = customtkinter.CTkButton(master=left_side_panel, text="Calibration", command=make_frame3)
      #button2.pack(pady=12, padx=10)
      emotion_button.pack(pady=12, padx=10)
      scenario_button = customtkinter.CTkButton(master=left_side_panel, text="Practice Scenarios", command=make_frame2)
      scenario_button.pack(pady=12, padx=10)
+     settings_button = customtkinter.CTkButton(master=left_side_panel, text="Settings", command= print("test"))
+     settings_button.pack(pady=12, padx=10)
      
 def clear_frames():
      if frames[2].get_frame() != None:
@@ -119,15 +140,14 @@ def clear_frames():
      if frames[1].get_frame() != None:
          frames[1].get_frame().destroy()
 
-def make_main():
+def main():
      clear_frames()     
      frames[0].set_frame(customtkinter.CTkFrame(master=main_container, fg_color="#34e5eb"))
      frames[0].get_frame().pack(pady = 20, padx=10, fill="both", expand=True)
      frames[0].set_label(customtkinter.CTkLabel(master=frames[0].get_frame(), font= ("Roboto", 30), text= "Welcome to \nEnyiAi\nPlease enter your name"))
      frames[0].get_label().pack(pady=30, padx=10)
-     frames[0].set_entry(customtkinter.CTkEntry(master=frames[0].get_frame(), placeholder_text="Name", text_color="white"))
-     frames[0].get_entry().pack(pady=12, padx=20)
-     #n = get_name()
+     frames[0].create_entry(frames[0])
+     get_user_name()
      
 
 
@@ -135,6 +155,6 @@ def make_main():
 
 if __name__ == "__main__":
       create_nav()
-      make_main()
+      main()
       
       main_container.mainloop()
