@@ -111,6 +111,7 @@ def make_frame2():
     button1.pack(pady=12, padx=30)
 
 def make_frame1():
+     pass
      
 
 def create_nav():
