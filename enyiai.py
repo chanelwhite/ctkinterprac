@@ -1,7 +1,7 @@
 import tkinter
 import customtkinter
 from functools import partial
-
+from nlp_model import NLP
 
 class Page(customtkinter.CTk):
     frame = None
@@ -65,7 +65,7 @@ customtkinter.set_default_color_theme("blue")
 main_container = customtkinter.CTk()
 main_container.geometry("700x600")
 main_container.title("EnyiAi")
-
+np = NLP()
 
 frames = [Page(), Page(), Page(), Page()]
 user = []
@@ -113,7 +113,7 @@ def make_frame2():
 
     button1.pack(pady=12, padx=30)
 def recalibration():
-     print("calibrating")
+     np.calibration_function("test", "test")
 def slider_event(value):
      print(int(value))
 
