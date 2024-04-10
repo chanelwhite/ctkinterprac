@@ -1,7 +1,7 @@
 import tkinter
 import customtkinter
 from functools import partial
-from PIL import Image
+
 
 class Page(customtkinter.CTk):
     frame = None
@@ -27,7 +27,10 @@ class Page(customtkinter.CTk):
          self.button = customtkinter.CTkButton(master=parent.get_frame(), text= t, command=com)
          self.button.pack(pady=12, padx=30, side=customtkinter.BOTTOM)
          return self.button
-         
+    
+    def create_slider(self):
+         self.slider = customtkinter.CTkSlider(master=frames[3].get_frame(), from_=0, to=100, command=slider_event)
+         return self.slider
     
     
 class User():
@@ -64,7 +67,7 @@ main_container.geometry("700x600")
 main_container.title("EnyiAi")
 
 
-frames = [Page(), Page(), Page()]
+frames = [Page(), Page(), Page(), Page()]
 user = []
 
 def create_user_name():
@@ -109,9 +112,26 @@ def make_frame2():
     button1 = frames[1].create_button("Login", make_frame3, frames[1])
 
     button1.pack(pady=12, padx=30)
+def recalibration():
+     print("calibrating")
+def slider_event(value):
+     print(int(value))
 
 def make_frame1():
-     pass
+     clear_frames()
+     frames[3].set_frame(customtkinter.CTkFrame(master=main_container, fg_color="blue"))
+     frames[3].get_frame().pack(pady = 20, padx=60, fill="both", expand=True)
+
+     label= frames[1].create_label("Settings", frames[3])
+     label.pack(pady=30, padx=10)
+     
+     slider = frames[3].create_slider()
+     slider.place(relx=0.5, rely= 0.4, anchor=tkinter.CENTER)
+
+     button = frames[3].create_button("Recalibration", recalibration, frames[3])
+     button.place(relx = 0.5, rely= 0.5, anchor=tkinter.CENTER)
+     
+
      
 
 def create_nav():
@@ -134,6 +154,8 @@ def clear_frames():
          frames[0].get_frame().destroy()
      if frames[1].get_frame() != None:
          frames[1].get_frame().destroy()
+     if frames[3].get_frame() != None:
+          frames[3].get_frame().destroy()
 
 def main():
      '''Makes the main frame of the app'''

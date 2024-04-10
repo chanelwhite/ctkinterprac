@@ -13,8 +13,8 @@ from gensim.models import KeyedVectors
 from scipy import spatial
 # had to use an older version scipy
 # download these first time you run
-# nltk.download('punkt')
-# nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('stopwords')
 
 
 def generate_function(input_df):
